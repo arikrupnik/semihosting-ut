@@ -15,7 +15,7 @@ ARM architecture includes a facility known as Semihosting.
 Semihosting allows code on the microcontroller to access the host's I/O facilities.
 UC code can call `stdio.h` functions like `printf(3)` and have the output appear on the host's console.
 
-Some plumbing is necessary for Semihosting to work:
+## Some plumbing is necessary for Semihosting to work
 
 * The uC binary must link against `rdimon` library
     * Relevant linker options: `-specs=rdimon.specs` `-lrdimon`
@@ -33,7 +33,7 @@ An OS program indicates success or failure with a return code, e.g., a failing `
 A Semihosting program needs a different way to indicate its outcome.
 I use two breakpoints for this an a GDB script that exits with 0 or 1 if it hits the success or failure breakpoint respectively.
 
-The files in this repository set up all of this plumbing:
+## The files in this repository set up all of this plumbing
 
 * `unit_tests,h` is the header that unit-test code must include
     * It defines the macro `assert()` which, unlike the standard definition in `assert.h` works in uC and OS binaries
