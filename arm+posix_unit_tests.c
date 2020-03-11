@@ -9,7 +9,7 @@
 #include "unit_tests.h"
 #include <stdlib.h>
 
-/* These two functions serve as labels where GDB can place
+/* These two functions serve as labels where gdb can place
    breakpoints. Embedded applications never quite return, and even if
    they did the invoker would not know about it. The embedded uint
    test recipe in the Makefile uploads the binary to target through
@@ -44,6 +44,10 @@ int main(int argc, char* argv[])
 
 #ifdef __arm__
   printf("execution past breakpoints :=(\n");
+  // need at least one call to failure() to prevent linker from
+  // stripping it from the binary. if that happens, gdb fails to set
+  // relevant breakpoint
+  failure();
 #endif
   return 0;
 }
