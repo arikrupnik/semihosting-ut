@@ -43,7 +43,7 @@ I use two breakpoints for this an a GDB script that exits with 0 or 1 if it hits
     * It defines labels for `sucess` and `failure`
     * It calls `tests()` from `main()`
 * `tut.gdb` is the script that allows GDB to run non-interactively and report
-* `arm+posix.mk` (upcoming) is a GNU Makefile that ties all of this together
+* `arm+posix.mk` is a GNU Makefile that ties all of this together
     * Include it from your main Makefile if you want to follow our build strategy
     * It defines recipes for compiling and linking on both host and uC
     * It defines recipes for flashing binaries onto target uC
@@ -54,9 +54,50 @@ I use two breakpoints for this an a GDB script that exits with 0 or 1 if it hits
 TODO
 
 ## Example project Makefile
+This makefile targets an STM32F042 target
 
-TODO
+```Makefile
+####################
+# GLOBAL FLAGS
 
-## How to set up OpenOCD and GDB without a Makefile
+CPPFLAGS = -I$(SHUT_PATH)
+CFLAGS   = -std=c99 -O3 -Wall -ffunction-sections
+#LDLIBS = -lm
 
-TODO
+####################
+# CROSS-COMPILER FLAGS
+
+ARM_FLAGS    = -mcpu=cortex-m0 -mthumb -mfloat-abi=soft
+ARM_CPPFLAGS = -Ist/CMSIS/core -Ist/CMSIS/device
+ARM_CFLAGS   =
+ARM_LDFLAGS  = -Tst/stm32f0xx-32-6.ld -Wl,-Map=$*.map -Wl,--gc-sections
+ARM_LDLIBS   = -specs=nano.specs
+
+# startup code from silicone vendor
+VENDOR_OBJS=startup_stm32f0xx.ao system_stm32f0xx.ao
+
+# target-specific OpenOCD configuration
+OCD_INTERFACE = interface/stlink-v2.cfg
+OCD_TARGET    = target/stm32f0x.cfg
+
+SHUT_PATH = semihosting-ut
+
+include $(SHUT_PATH)/arm+posix.mk
+
+VPATH = .:st:$(SHUT_PATH)
+
+####################
+# LINKAGE FOR NON-TRIVIAL EXECUTABLES
+
+# main production binary
+app.elf: main.ao liba.ao libb.ao
+
+# target unit tests
+liba_tests.telf: a.ao        # implicitly depends on liba_tests.ao as well
+libb_tests.telf: b.ao
+
+# host unit tests
+liba_tests:      a.o arm+posix_unit_tests.o # implicitly depends on liba_tests.o
+libb_tests:      b.o arm+posix_unit_tests.o
+```
+
