@@ -14,7 +14,12 @@
    they did the invoker would not know about it. The embedded uint
    test recipe in the Makefile uploads the binary to target through
    gdb, and sets these two breakpoints. Gdb exists with success or
-   failure code depending on which of the breakpoints hits. */
+   failure code depending on which of the breakpoints hits.
+
+   It is imperative to compile this file without optimizations, e.g.,
+   with `-O0` (preferably with `-O0 -g`). With default optimization
+   levels, the compiler and linker can be surprisingly aggressive in
+   inlining and stripping away these dummy functions. */
 void success() {}
 void failure() {}
 
