@@ -51,7 +51,17 @@ I use two breakpoints for this an a GDB script that exits with 0 or 1 if it hits
 
 ## Example unit-test file
 
-TODO
+```C
+#include "liba.h"
+
+#include <unit_tests.h>
+
+void tests()
+{
+  assert(liba_func(0)==0);
+  assert(liba_func(1)==1);
+}
+```
 
 ## Example project Makefile
 This makefile targets an STM32F042 target
