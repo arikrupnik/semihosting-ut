@@ -20,8 +20,8 @@ UC code can call `stdio.h` functions like `printf(3)` and have the output appear
 * The uC binary must link against `rdimon` library
     * Relevant linker options: `-specs=rdimon.specs` `-lrdimon`
 * uC code must call `initialise_monitor_handles()` before calling any I/O functions
-    * Calling `initialise_monitor_handles();` waits for acknowledgment from an attached debugger
-    * Making binaries compiled for Semihosting useless in production
+    * Calling `initialise_monitor_handles();` waits for acknowledgment from an attached debugger...
+    * ...making binaries compiled for Semihosting useless in production
 * A debugging probe (SWD, JTAG)
 * Software on the host must listen for Semihosting calls (OpenOCD)
 * Software on the host to report test success or failure (GDB)
