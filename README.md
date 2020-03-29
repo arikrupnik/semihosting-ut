@@ -31,18 +31,18 @@ While Semihosting provides I/O facilities, it offers no standard way to communic
 UC programs never really exit in the sense that programs on an OS do.
 An OS program indicates success or failure with a return code, e.g., a failing `assert()` might call `exit(1)`.
 A Semihosting program needs a different way to indicate its outcome.
-I use two breakpoints for this an a GDB script that exits with 0 or 1 if it hits the success or failure breakpoint respectively.
+I use two breakpoints for this and a GDB script that exits with 0 or 1 if it hits the success or failure breakpoint respectively.
 
 ## The files in this repository set up all of this plumbing
 
-* `unit_tests,h` is the header that unit-test code must include
+* `unit_tests.h` is the header that unit-test code must include
     * It defines the macro `assert()` which, unlike the standard definition in `assert.h` works in uC and OS binaries
     * It declares a prototype for `void tests(void)` which unit-test code must implement. If `tests()` returns, the tests pass. If an `assert()` fails during the invocation of `tests()`, the tests fail.
 * `arm+posix_unit_tests.c` is the implementation for the above. Unit-test binaries must link against this file.
     * It defines a `main()` that works equally for uC and OS binaries
     * It defines labels for `sucess` and `failure`
     * It calls `tests()` from `main()`
-* `tut.gdb` is the script that allows GDB to run non-interactively and report
+* `tut.gdb` is the script that allows GDB to run non-interactively and report exit status
 * `arm+posix.mk` is a GNU Makefile that ties all of this together
     * Include it from your main Makefile if you want to follow our build strategy
     * It defines recipes for compiling and linking on both host and uC
