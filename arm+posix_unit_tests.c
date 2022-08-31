@@ -13,7 +13,7 @@
    breakpoints. Embedded applications never quite return, and even if
    they did the invoker would not know about it. The embedded uint
    test recipe in the Makefile uploads the binary to target through
-   gdb, and sets these two breakpoints. Gdb exists with success or
+   gdb, and sets these two breakpoints. Gdb exits with success or
    failure code depending on which of the breakpoints hits.
 
    It is imperative to compile this file without optimizations, e.g.,
